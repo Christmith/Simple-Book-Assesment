@@ -1,0 +1,30 @@
+# Node.js
+node_modules/
+
+# Logs
+*.log
+
+# Dependency directories
+client/node_modules/
+server/node_modules/
+
+# Build output
+dist/
+build/
+
+# VS Code settings
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# Firebase configuration file
+client/src/firebase.js
+
+# Server config folder
+server/src/config/
+
