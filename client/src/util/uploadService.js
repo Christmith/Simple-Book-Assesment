@@ -9,9 +9,7 @@ export const uploadImage = async (file) => {
   return new Promise((resolve, reject) => {
     uploadTask.on(
       "state_changed",
-      (snapshot) => {
-        // Optional: Track progress
-      },
+      (snapshot) => {},
       (error) => reject(error),
       () => {
         // Resolve the URL once upload completes
