@@ -8,7 +8,6 @@
 
       <!-- Two-column layout with grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Category Dropdown with Placeholder -->
         <select v-model="category" id="category" class="p-2 border w-full">
           <option value="" disabled>Select Category</option>
           <option id="electronics" value="Electronics">Electronics</option>
@@ -16,7 +15,6 @@
           <option id="food" value="Food">Food</option>
         </select>
 
-        <!-- Name Input -->
         <input
           type="text"
           id="name"
@@ -25,7 +23,6 @@
           class="p-2 border w-full"
         />
 
-        <!-- Brand Input -->
         <input
           type="text"
           id="brand"
@@ -34,13 +31,11 @@
           class="p-2 border w-full"
         />
 
-        <!-- Status Dropdown -->
         <select v-model="status" class="p-2 border w-full">
           <option id="available" value="Available">Available</option>
           <option id="unavailable" value="Unavailable">Unavailable</option>
         </select>
 
-        <!-- Price Input -->
         <input
           type="number"
           id="price"
@@ -49,7 +44,6 @@
           class="p-2 border w-full mb-4"
         />
 
-        <!-- Stock Quantity Input -->
         <input
           type="number"
           id="quantity"
@@ -59,7 +53,6 @@
         />
       </div>
 
-      <!-- Description Textarea -->
       <textarea
         id="description"
         v-model="description"
@@ -68,10 +61,10 @@
         rows="3"
       ></textarea>
 
-      <!-- Image Upload Input -->
       <input
         id="image"
         type="file"
+        accept="image/*"
         @change="onFileChange"
         class="mb-4 p-2 border w-full"
       />
@@ -79,7 +72,8 @@
       <!-- Submit and Close Buttons -->
       <button
         @click="handleSubmit"
-        class="w-full py-2 mb-2 text-white font-semibold rounded-md transition bg-purple-500 hover:bg-purple-600"
+        :disabled="!isFormValid"
+        class="w-full py-2 mb-2 text-white font-semibold rounded-md transition bg-purple-500 hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {{ dialogButtonText }}
       </button>
@@ -102,7 +96,7 @@ export default {
     showDialog: Boolean,
     dialogTitle: String,
     dialogButtonText: String,
-    product: Object, // Prop to receive product data for updating
+    product: Object,
   },
 
   data() {
@@ -118,11 +112,23 @@ export default {
     };
   },
 
+  computed: {
+    // Checks if all fields are filled (excluding image)
+    isFormValid() {
+      return (
+        this.category &&
+        this.name &&
+        this.brand &&
+        this.status &&
+        this.price &&
+        this.description
+      );
+    },
+  },
+
   watch: {
-    // Watch for changes in the passed product prop
     product: {
       handler(newProduct) {
-        // Reset data if a product is provided for editing
         if (newProduct) {
           this.category = newProduct.category || "";
           this.name = newProduct.name || "";
@@ -134,21 +140,18 @@ export default {
           this.imageUrl = newProduct.imageUrl || "";
         }
       },
-      immediate: true, // Ensure the watcher runs immediately when the component is created
+      immediate: true,
     },
   },
 
   methods: {
-    // Handle file change event
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        this.imageUrl = URL.createObjectURL(file); // Preview the image locally
-
-        // Upload the image to Firebase
+        this.imageUrl = URL.createObjectURL(file);
         uploadImage(file)
           .then((url) => {
-            this.imageUrl = url; // Set the image URL from Firebase
+            this.imageUrl = url;
             console.log("Image uploaded successfully:", url);
           })
           .catch((error) => {
@@ -157,7 +160,6 @@ export default {
       }
     },
 
-    // Emit the form data to the parent component on submit and reset the form and close the dialog
     handleSubmit() {
       const product = {
         category: this.category,
@@ -175,17 +177,15 @@ export default {
       console.log(product);
     },
 
-    // Close the dialog
     closeDialog() {
       this.$emit("close");
     },
 
-    // Reset the form fields
     resetForm() {
       this.category = "";
       this.name = "";
       this.brand = "";
-      this.status = "available";
+      this.status = "Available";
       this.price = "";
       this.quantity = "";
       this.description = "";
