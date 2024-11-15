@@ -26,5 +26,4 @@ Thumbs.db
 client/src/firebase.js
 
 # Server config folder
-server/src/config/
-
+server/src/config/service-account-file.json
