@@ -31,7 +31,7 @@ router.beforeEach((to, from, next) => {
       if (requiresAuth && !user) {
         next("/signin"); // Redirect to SignIn if not authenticated
       } else if (user && to.path === "/signin" && store.state.justSignedUp) {
-        next(); // Redirect to Admin if logged in and trying to go to SignIn
+        next(); // Proceed to route if just signed up
       } else if (user && (to.path === "/signin" || to.path === "/signup")) {
         next("/admin"); // Redirect to Admin if already logged in and trying to access auth pages
       } else {
