@@ -7,9 +7,8 @@ import { store } from "./store";
 // Create the Vue app
 const app = createApp(App);
 
-// Use the Vuex store
+// Use the Vuex store and Vue router
 app.use(store);
-// Use the Vue Router
 app.use(router);
 
 // Mount the app
